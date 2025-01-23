@@ -58,6 +58,7 @@
         <iframe id="resultFrame"></iframe>
       </div>
       <div class="search-panel">
+        <input type="text" id="lawName" placeholder="법령명 입력" />
         <input type="number" id="articleNumber" placeholder="조문 번호 입력" />
         <button onclick="searchArticle()">조회</button>
       </div>
@@ -65,11 +66,11 @@
 
     <script>
       function searchArticle() {
+        const law = document.getElementById("lawName").value;
         const number = document.getElementById("articleNumber").value;
-        if (number) {
-          document.getElementById(
-            "resultFrame"
-          ).src = `https://www.law.go.kr/법령/민법/제${number}조`;
+        if (law && number) {
+          document.getElementById("resultFrame").src = 
+            `https://www.law.go.kr/법령/${encodeURIComponent(law)}/제${number}조`;
         }
       }
       // 페이지 로드 시 input에 포커스
