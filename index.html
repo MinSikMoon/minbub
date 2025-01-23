@@ -59,33 +59,49 @@
       </div>
       <div class="search-panel">
         <input type="text" id="lawName" placeholder="법령명 입력" />
-        <input type="number" id="articleNumber" placeholder="조문 번호 입력" />
+        <input type="text" id="articleNumber" placeholder="조문 번호 입력" />
         <button onclick="searchArticle()">조회</button>
       </div>
     </div>
 
     <script>
+      function formatArticleNumber(number) {
+        if (number.includes("-")) {
+          const [base, sub] = number.split("-");
+          console.log(`제${base}조의${sub}`);
+          return `제${base}조의${sub}`;
+        }
+        return `제${number}조`;
+      }
+
       function searchArticle() {
         const law = document.getElementById("lawName").value;
         const number = document.getElementById("articleNumber").value;
+
         if (law && number) {
-          document.getElementById("resultFrame").src = 
-            `https://www.law.go.kr/법령/${encodeURIComponent(law)}/제${number}조`;
+          const formattedNumber = formatArticleNumber(number);
+          const url = `https://www.law.go.kr/법령/${encodeURIComponent(
+            law
+          )}/${encodeURIComponent(formattedNumber)}`;
+          document.getElementById("resultFrame").src = url;
         }
       }
+
       // 페이지 로드 시 input에 포커스
       window.onload = function () {
         document.getElementById("articleNumber").focus();
       };
 
       // Enter 키 이벤트 처리
-      document
-        .getElementById("articleNumber")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            searchArticle();
-          }
-        });
+      document.addEventListener("keypress", function (e) {
+        if (
+          e.key === "Enter" &&
+          (document.activeElement.id === "lawName" ||
+            document.activeElement.id === "articleNumber")
+        ) {
+          searchArticle();
+        }
+      });
     </script>
   </body>
 </html>
