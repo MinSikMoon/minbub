@@ -90,21 +90,16 @@
       // 페이지 로드 시 input에 포커스
       window.onload = function () {
         try {
-          // 250805 url 이름으로 법령명 세팅해놓기
-          const pathName = window.location.pathname; // 1. 주소 가져오기
-          const pathSegments = pathName.split("/").filter(Boolean); // 2. 주소 분석하기
-
-          // --- 안정성을 위한 코드 2: if문 ---
-          // 주소에 법령명이 실제로 포함되어 있는지 확인
-          if (pathSegments.length > 1) {
-            const lawNameFromUrl = pathSegments[pathSegments.length - 1];
-
-            // --- 핵심 기능 코드 ---
-            const decodedLawName = decodeURIComponent(lawNameFromUrl); // 3. 한글 변환
-            document.getElementById("lawName").value = decodedLawName; // 4. 입력창에 넣기
+          // location.pathname 대신 location.hash를 읽습니다.
+          // 예: #/민법 -> "민법" 추출
+          const hash = window.location.hash;
+          if (hash) {
+            const lawNameFromUrl = hash.substring(2); // '#/' 두 글자를 제외하고 가져옴
+            const decodedLawName = decodeURIComponent(lawNameFromUrl);
+            document.getElementById("lawName").value = decodedLawName;
           }
         } catch (e) {
-          console.error("URL에서 법령명을 가져오는 중 오류 발생:", e);
+          console.error("URL 해시에서 법령명을 가져오는 중 오류 발생:", e);
         }
         document.getElementById("articleNumber").focus();
       };
